@@ -661,7 +661,7 @@
   async function loadAccessories(){
     const shopGrid = document.getElementById('shopGrid');
     try{
-      const snap = await getDocs(collection(db, "store"));
+      const snap = await getDocs(collection(db, "accessories"));
       if(snap.empty){
         shopGrid.innerHTML = `<div class="empty-state">Todavía no hay accesorios cargados en el inventario.</div>`;
         return;
