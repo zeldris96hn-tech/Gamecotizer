@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMER PRO // Reparación & Accesorios</title>
+<meta name="description" content="Servicio técnico especializado en consolas y PC gamer. Consulta el estado de tu reparación en tiempo real y compra accesorios en stock.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg-void:#08090b;
+    --bg-panel:#101216;
+    --bg-panel-raised:#161920;
+    --line:#22262e;
+    --neon:#3dff6e;
+    --neon-dim:#1c6b36;
+    --neon-glow:rgba(61,255,110,0.35);
+    --warn:#ff9d3d;
+    --warn-glow:rgba(255,157,61,0.3);
+    --danger:#ff4d5e;
+    --text-hi:#eef2ee;
+    --text-mid:#9aa39c;
+    --text-low:#5c645e;
+    --radius-sm:8px;
+    --radius-md:14px;
+    --radius-lg:22px;
+    --font-display:'Rajdhani',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'Share Tech Mono',monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg-void);
+    color:var(--text-hi);
+    font-family:var(--font-body);
+    line-height:1.5;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ---------- fondo circuito ---------- */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:52px 52px;
+    opacity:0.18;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+  }
+
+  ::selection{background:var(--neon);color:#04140a;}
+
+  a{color:inherit;text-decoration:none;}
+
+  ::-webkit-scrollbar{width:9px;}
+  ::-webkit-scrollbar-track{background:var(--bg-void);}
+  ::-webkit-scrollbar-thumb{background:var(--neon-dim);border-radius:8px;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+
+  h1,h2,h3,.eyebrow,.mono-label{font-family:var(--font-display);letter-spacing:0.02em;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    color:var(--neon);
+    font-size:0.78rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:8px;height:8px;
+    background:var(--neon);
+    border-radius:50%;
+    box-shadow:0 0 10px var(--neon-glow), 0 0 20px var(--neon-glow);
+    animation:blink 1.8s infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.25;}}
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(8,9,11,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 24px;max-width:1180px;margin:0 auto;
+  }
+  .logo{
+    font-family:var(--font-display);font-weight:700;font-size:1.35rem;
+    letter-spacing:0.04em;text-transform:uppercase;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo span{color:var(--neon);text-shadow:0 0 14px var(--neon-glow);}
+  .logo .dot{color:var(--text-low);}
+  .nav-links{display:flex;gap:34px;font-family:var(--font-display);font-weight:600;font-size:1rem;text-transform:uppercase;letter-spacing:0.03em;}
+  .nav-links a{color:var(--text-mid);transition:color .2s;position:relative;}
+  .nav-links a:hover{color:var(--neon);}
+  .nav-cta{
+    font-family:var(--font-mono);font-size:0.85rem;
+    border:1px solid var(--neon-dim);color:var(--neon);
+    padding:9px 18px;border-radius:var(--radius-sm);
+    transition:all .2s;
+  }
+  .nav-cta:hover{background:var(--neon);color:#04140a;box-shadow:0 0 22px var(--neon-glow);}
+  .burger{display:none;background:none;border:none;color:var(--neon);font-size:1.6rem;cursor:pointer;}
+
+  @media(max-width:820px){
+    .nav-links{display:none;}
+    .burger{display:block;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:96px 0 80px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:center;
+  }
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;}}
+
+  .hero h1{
+    font-size:clamp(2.6rem,5.4vw,4.4rem);
+    font-weight:700;line-height:1.02;text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .hero h1 .accent{
+    color:var(--neon);
+    text-shadow:0 0 24px var(--neon-glow), 0 0 60px rgba(61,255,110,0.18);
+  }
+  .hero p{
+    color:var(--text-mid);font-size:1.08rem;max-width:480px;margin-bottom:32px;
+  }
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap;}
+
+  .btn{
+    font-family:var(--font-display);font-weight:600;text-transform:uppercase;
+    letter-spacing:0.03em;font-size:1rem;
+    padding:15px 30px;border-radius:var(--radius-sm);cursor:pointer;
+    border:none;transition:transform .15s, box-shadow .2s;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{
+    background:var(--neon);color:#04140a;
+    box-shadow:0 0 0 rgba(61,255,110,0);
+  }
+  .btn-primary:hover{box-shadow:0 0 28px var(--neon-glow);}
+  .btn-ghost{
+    background:transparent;color:var(--text-hi);border:1px solid var(--line);
+  }
+  .btn-ghost:hover{border-color:var(--neon-dim);color:var(--neon);}
+
+  /* terminal boot signature */
+  .terminal{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(61,255,110,0.04), 0 30px 60px -20px rgba(0,0,0,0.7);
+  }
+  .terminal-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 16px;border-bottom:1px solid var(--line);
+    background:var(--bg-panel-raised);
+  }
+  .terminal-bar span{width:11px;height:11px;border-radius:50%;background:var(--line);}
+  .terminal-bar .lbl{
+    margin-left:8px;font-family:var(--font-mono);font-size:0.78rem;color:var(--text-low);
+  }
+  .terminal-body{
+    padding:24px;font-family:var(--font-mono);font-size:0.92rem;color:var(--neon);
+    min-height:230px;
+  }
+  .terminal-body .line{opacity:0;animation:reveal .1s forwards;white-space:pre-wrap;}
+  .terminal-body .muted{color:var(--text-mid);}
+  .terminal-body .cursor{
+    display:inline-block;width:8px;height:16px;background:var(--neon);
+    vertical-align:middle;animation:blink 1s step-end infinite;
+  }
+  @keyframes reveal{to{opacity:1;}}
+
+  /* ---------- section shell ---------- */
+  section.block{padding:88px 0;position:relative;}
+  .block-head{margin-bottom:44px;max-width:640px;}
+  .block-head h2{font-size:clamp(1.9rem,3.6vw,2.6rem);text-transform:uppercase;font-weight:700;}
+  .block-head p{color:var(--text-mid);margin-top:12px;font-size:1.02rem;}
+  .divider{height:1px;background:linear-gradient(90deg,var(--line),transparent);width:100%;}
+
+  /* ---------- repair tracker ---------- */
+  .tracker-panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    padding:36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .tracker-panel::after{
+    content:"";position:absolute;left:0;right:0;height:2px;top:0;
+    background:linear-gradient(90deg,transparent,var(--neon),transparent);
+    animation:scan 3.4s linear infinite;
+  }
+  @keyframes scan{0%{transform:translateY(0);}100%{transform:translateY(420px);}}
+
+  .lookup-form{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+  .lookup-form input{
+    flex:1;min-width:220px;
+    background:var(--bg-void);border:1px solid var(--line);
+    border-radius:var(--radius-sm);padding:15px 18px;
+    color:var(--text-hi);font-family:var(--font-mono);font-size:1rem;
+    outline:none;transition:border-color .2s;
+  }
+  .lookup-form input:focus{border-color:var(--neon-dim);}
+  .lookup-form input::placeholder{color:var(--text-low);}
+
+  .hint{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-low);margin-top:10px;}
+
+  #trackerResult{margin-top:32px;}
+  .status-card{
+    border:1px solid var(--line);border-radius:var(--radius-md);
+    padding:28px;background:var(--bg-panel-raised);
+  }
+  .status-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:22px;}
+  .status-device{font-family:var(--font-display);font-size:1.3rem;font-weight:600;text-transform:uppercase;}
+  .status-phone{font-family:var(--font-mono);color:var(--text-low);font-size:0.85rem;margin-top:4px;}
+
+  .status-pill{
+    font-family:var(--font-mono);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;
+    padding:8px 16px;border-radius:999px;border:1px solid currentColor;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .status-pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+  .st-pendiente{color:var(--text-mid);}
+  .st-proceso{color:var(--warn);text-shadow:0 0 12px var(--warn-glow);}
+  .st-listo{color:var(--neon);text-shadow:0 0 12px var(--neon-glow);}
+
+  .progress-track{height:6px;background:var(--bg-void);border-radius:6px;overflow:hidden;margin-bottom:26px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--neon-dim),var(--neon));border-radius:6px;transition:width .6s ease;}
+
+  .photos-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px;}
+  .photos-row img{
+    width:104px;height:104px;object-fit:cover;border-radius:var(--radius-sm);
+    border:1px solid var(--line);cursor:pointer;transition:border-color .2s, transform .2s;
+  }
+  .photos-row img:hover{border-color:var(--neon-dim);transform:scale(1.03);}
+
+  .notes-box{
+    background:var(--bg-void);border-left:3px solid var(--text-low);
+    padding:16px 18px;border-radius:var(--radius-sm);font-size:0.94rem;color:var(--text-mid);margin-bottom:20px;
+  }
+
+  .approval-box{
+    border:1px solid var(--warn);border-radius:var(--radius-md);
+    padding:20px;background:rgba(255,157,61,0.06);
+    display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+  }
+  .approval-box h4{font-family:var(--font-display);color:var(--warn);text-transform:uppercase;font-size:1.05rem;margin-bottom:6px;}
+  .approval-box p{color:var(--text-mid);font-size:0.92rem;max-width:420px;}
+  .btn-warn{background:var(--warn);color:#241300;}
+  .btn-warn:hover{box-shadow:0 0 24px var(--warn-glow);}
+  .btn-accepted{background:transparent;border:1px solid var(--neon);color:var(--neon);cursor:default;}
+
+  .empty-state, .error-state{
+    font-family:var(--font-mono);color:var(--text-low);padding:34px 0;text-align:center;
+  }
+  .error-state{color:var(--danger);}
+
+  .spinner{
+    width:20px;height:20px;border:2px solid var(--line);border-top-color:var(--neon);
+    border-radius:50%;animation:spin .7s linear infinite;display:inline-block;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- shop ---------- */
+  .shop-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;
+  }
+  .product-card{
+    background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius-md);
+    overflow:hidden;transition:border-color .25s, transform .25s;position:relative;
+  }
+  .product-card:hover{border-color:var(--neon-dim);transform:translateY(-4px);}
+  .product-img{
+    width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--bg-panel-raised);
+    display:block;
+  }
+  .product-body{padding:18px;}
+  .product-cat{font-family:var(--font-mono);font-size:0.7rem;color:var(--neon);text-transform:uppercase;letter-spacing:0.1em;}
+  .product-name{font-family:var(--font-display);font-weight:600;font-size:1.12rem;margin:6px 0 4px;text-transform:uppercase;}
+  .product-desc{color:var(--text-mid);font-size:0.85rem;margin-bottom:14px;min-height:36px;}
+  .product-foot{display:flex;justify-content:space-between;align-items:center;}
+  .product-price{font-family:var(--font-mono);font-size:1.15rem;color:var(--text-hi);}
+  .product-stock{font-family:var(--font-mono);font-size:0.72rem;padding:4px 10px;border-radius:999px;}
+  .stock-ok{color:var(--neon);border:1px solid var(--neon-dim);}
+  .stock-low{color:var(--warn);border:1px solid var(--warn);}
+  .stock-out{color:var(--text-low);border:1px solid var(--line);}
+
+  .skeleton{
+    background:linear-gradient(90deg,var(--bg-panel) 25%,var(--bg-panel-raised) 50%,var(--bg-panel) 75%);
+    background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:var(--radius-md);height:280px;
+  }
+  @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:44px 0;margin-top:40px;}
+  .footer-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;align-items:center;}
+  .footer-row p{color:var(--text-low);font-family:var(--font-mono);font-size:0.82rem;}
+
+  /* ---------- whatsapp float ---------- */
+  .wa-float{
+    position:fixed;bottom:26px;right:26px;z-index:60;
+    width:60px;height:60px;border-radius:50%;
+    background:var(--neon);color:#04140a;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 0 var(--neon-glow);
+    animation:pulse 2.4s infinite;
+    cursor:pointer;border:none;
+  }
+  .wa-float svg{width:28px;height:28px;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 var(--neon-glow);}
+    70%{box-shadow:0 0 0 16px rgba(61,255,110,0);}
+    100%{box-shadow:0 0 0 0 rgba(61,255,110,0);}
+  }
+
+  .toast{
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--bg-panel-raised);border:1px solid var(--neon-dim);color:var(--text-hi);
+    padding:14px 22px;border-radius:var(--radius-sm);font-family:var(--font-mono);font-size:0.88rem;
+    opacity:0;pointer-events:none;transition:all .3s ease;z-index:70;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span>GAMER</span><span class="dot">·</span>PRO</div>
+    <div class="nav-links">
+      <a href="#reparacion">Reparación</a>
+      <a href="#tienda">Tienda</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a href="#reparacion" class="nav-cta">Consultar orden</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Servicio técnico especializado</div>
+        <h1>Tu consola,<br>tu PC, tu <span class="accent">setup</span>.<br>En buenas manos.</h1>
+        <p>Diagnóstico, reparación y accesorios para gamers. Seguí el estado de tu equipo en tiempo real, desde donde estés.</p>
+        <div class="btn-row">
+          <a href="#reparacion" class="btn btn-primary">Consultar mi reparación</a>
+          <a href="#tienda" class="btn btn-ghost">Ver accesorios</a>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span></span><span></span><span></span>
+          <span class="lbl">diagnostico.sh</span>
+        </div>
+        <div class="terminal-body" id="bootTerminal"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="divider"></div></div>
+
+  <!-- REPARACION -->
+  <section class="block" id="reparacion">
+    <div class="wrap">
+      <div class="block-head">
+        <div class="eyebrow">Estado en vivo</div>
+        <h2>Consultá mi reparación</h2>
+        <p>Ingresá el número de teléfono con el que dejaste tu equipo y vas a ver el estado actualizado al instante, incluidas las fotos del proceso.</p>
+      </div>
+
+      <div class="tracker-panel">
+        <form class="lookup-form" id="lookupForm">
+          <input type="tel" id="phoneInput" placeholder="Ej: 9999-9999" autocomplete="tel" required>
+          <button type="submit" class="btn btn-primary">Buscar orden</button>
+        </form>
+        <p class="hint">// El número debe coincidir exactamente con el registrado al recibir el equipo.</p>
+
+        <div id="trackerResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="divider"></div></div>
+
+  <!-- TIENDA -->
+  <section class="block" id="tienda">
+    <div class="wrap">
+      <div class="block-head">
+        <div class="eyebrow">Stock actualizado</div>
+        <h2>Tienda de accesorios</h2>
+        <p>Gomas, joysticks, cables y más — directo desde nuestro inventario. Consultanos disponibilidad por WhatsApp.</p>
+      </div>
+      <div class="shop-grid" id="shopGrid">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contacto">
+  <div class="wrap footer-row">
+    <div class="logo" style="font-size:1.1rem;"><span>GAMER</span><span class="dot">·</span>PRO</div>
+    <p>&copy; <span id="year"></span> Gamer Pro — Servicio técnico & accesorios gamer.</p>
+  </div>
+</footer>
+
+<button class="wa-float" id="waFloat" aria-label="Chatear por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.86 9.86 0 0 0 12.04 2m0 1.67c2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.25 8.24a8.3 8.3 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.4c0-4.55 3.7-8.22 8.27-8.22M8.53 7.33c-.16 0-.43.06-.66.31c-.22.25-.87.85-.87 2.07c0 1.22.89 2.4 1.01 2.57c.13.16 1.76 2.69 4.33 3.76c2.15.89 2.58.71 3.05.67c.46-.04 1.5-.61 1.71-1.2c.21-.59.21-1.09.15-1.2c-.07-.1-.23-.16-.48-.28c-.25-.13-1.5-.74-1.73-.82c-.23-.09-.4-.13-.57.13c-.16.25-.65.82-.8.99c-.15.16-.29.18-.54.06c-.25-.13-1.06-.39-2.02-1.25c-.74-.66-1.25-1.48-1.39-1.73c-.15-.25-.02-.38.11-.51c.11-.11.25-.29.37-.43c.12-.15.16-.25.25-.41c.08-.17.04-.31-.02-.44c-.06-.13-.56-1.39-.79-1.9c-.2-.46-.4-.42-.57-.43c-.14-.01-.31-.01-.47-.01"/></svg>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  /* =========================================================================
+     GAMER PRO — Landing page
+     Conexión a Firebase Firestore (proyecto: gamecotizer)
+     ⚠️ Reemplazá firebaseConfig con las credenciales reales de tu proyecto
+        (Firebase Console → Configuración del proyecto → Tus apps → SDK config)
+     ========================================================================= */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore, collection, query, where, onSnapshot,
+    doc, updateDoc, getDocs
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCYH-iQyQfdeHZuauZVjbdGqGudQsVzhM4",
+    authDomain: "gamecotizer.firebaseapp.com",
+    projectId: "gamecotizer",
+    storageBucket: "gamecotizer.firebasestorage.app",
+    messagingSenderId: "538394073121",
+    appId: "1:538394073121:web:28c69caae8e2ec287feb60"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const WHATSAPP_NUMBER = "50494212074"; // <-- número real con código de país, sin +
+  const WHATSAPP_MSG = "Hola! Quiero hacer una consulta sobre reparación o accesorios.";
+
+  /* ---------- WhatsApp float ---------- */
+  document.getElementById('waFloat').addEventListener('click', () => {
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MSG)}`, '_blank');
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2600);
+  }
+
+  /* ---------- Boot terminal (hero signature) ---------- */
+  const bootLines = [
+    { text: "$ iniciando_diagnostico.exe", cls:"" },
+    { text: "  cargando módulos de hardware ...", cls:"muted" },
+    { text: "  cargando módulos de hardware ... OK", cls:"muted" },
+    { text: "  escaneando puertos, joysticks y sockets ...", cls:"muted" },
+    { text: "  estado del sistema: ", cls:"muted", inline:"OPERATIVO" },
+    { text: "  técnicos disponibles: ", cls:"muted", inline:"3/3" },
+    { text: "> listo para recibir tu equipo_", cls:"" },
+  ];
+  const bootEl = document.getElementById('bootTerminal');
+  let bootDelay = 150;
+  bootLines.forEach((l, i) => {
+    const row = document.createElement('div');
+    row.className = 'line ' + (l.cls||'');
+    row.style.animationDelay = (bootDelay/1000) + 's';
+    row.textContent = l.text + (l.inline || '');
+    if(i === bootLines.length - 1){
+      const cur = document.createElement('span');
+      cur.className = 'cursor';
+      row.appendChild(cur);
+    }
+    bootEl.appendChild(row);
+    bootDelay += 380;
+  });
+
+  /* =========================================================================
+     SECCIÓN: Consultar mi reparación
+     Estructura esperada en Firestore, colección "orders":
+     {
+       telefono: "99999999",
+       dispositivo: "PS5 - Control DualSense",
+       estado: "Pendiente" | "En Proceso" | "Listo",
+       fotos: ["https://...", "https://..."],
+       notas: "texto libre del técnico",
+       requiereAprobacion: true | false,
+       presupuestoAdicional: "L. 350 - cambio de sticks analógicos",
+       clienteAcepto: true | false,
+       actualizado: <timestamp>
+     }
+     ========================================================================= */
+
+  const STATUS_STEPS = { "Pendiente": 1, "En Proceso": 2, "Listo": 3 };
+  let unsubscribeOrder = null;
+
+  const lookupForm = document.getElementById('lookupForm');
+  const resultBox = document.getElementById('trackerResult');
+
+  lookupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const phone = document.getElementById('phoneInput').value.trim();
+    if(!phone) return;
+
+    if(unsubscribeOrder) unsubscribeOrder();
+
+    resultBox.innerHTML = `<div class="empty-state"><span class="spinner"></span> Buscando tu orden...</div>`;
+
+    try{
+      const ordersRef = collection(db, "orders");
+      const q = query(ordersRef, where("telefono", "==", phone));
+
+      unsubscribeOrder = onSnapshot(q, (snapshot) => {
+        if(snapshot.empty){
+          resultBox.innerHTML = `<div class="empty-state">No encontramos ninguna orden asociada a ese número.<br>Verificá el número o escribinos por WhatsApp.</div>`;
+          return;
+        }
+        // Si hay más de una orden activa, mostramos la más reciente
+        const docs = snapshot.docs.sort((a,b) => {
+          const ta = a.data().actualizado?.toMillis?.() || 0;
+          const tb = b.data().actualizado?.toMillis?.() || 0;
+          return tb - ta;
+        });
+        renderOrder(docs[0]);
+      }, (err) => {
+        console.error(err);
+        resultBox.innerHTML = `<div class="error-state">Ocurrió un error al consultar tu orden. Intentá de nuevo en unos segundos.</div>`;
+      });
+    }catch(err){
+      console.error(err);
+      resultBox.innerHTML = `<div class="error-state">Ocurrió un error al consultar tu orden.</div>`;
+    }
+  });
+
+  function renderOrder(docSnap){
+    const data = docSnap.data();
+    const estado = data.estado || "Pendiente";
+    const step = STATUS_STEPS[estado] || 1;
+    const pillClass = estado === "Listo" ? "st-listo" : estado === "En Proceso" ? "st-proceso" : "st-pendiente";
+    const fotos = Array.isArray(data.fotos) ? data.fotos : [];
+
+    resultBox.innerHTML = `
+      <div class="status-card">
+        <div class="status-top">
+          <div>
+            <div class="status-device">${escapeHTML(data.dispositivo || "Equipo sin nombre")}</div>
+            <div class="status-phone">Tel. ${escapeHTML(data.telefono || "")}</div>
+          </div>
+          <span class="status-pill ${pillClass}">${escapeHTML(estado)}</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${(step/3)*100}%"></div>
+        </div>
+
+        ${fotos.length ? `
+          <div class="photos-row">
+            ${fotos.map(url => `<img src="${escapeAttr(url)}" alt="Foto del proceso" onclick="window.open('${escapeAttr(url)}','_blank')">`).join('')}
+          </div>` : ''}
+
+        ${data.notas ? `<div class="notes-box">📋 ${escapeHTML(data.notas)}</div>` : ''}
+
+        ${data.requiereAprobacion ? renderApprovalBox(docSnap.id, data) : ''}
+      </div>
+    `;
+  }
+
+  function renderApprovalBox(orderId, data){
+    if(data.clienteAcepto){
+      return `
+        <div class="approval-box" style="border-color:var(--neon-dim);background:rgba(61,255,110,0.05);">
+          <div>
+            <h4 style="color:var(--neon);">Presupuesto aprobado</h4>
+            <p>Gracias por confirmar. Ya seguimos con la reparación adicional.</p>
+          </div>
+          <button class="btn btn-accepted" disabled>✓ Aceptado</button>
+        </div>
+      `;
+    }
+    return `
+      <div class="approval-box">
+        <div>
+          <h4>Reparación adicional necesaria</h4>
+          <p>${escapeHTML(data.presupuestoAdicional || "El técnico detectó un problema adicional. Contactanos para más detalles.")}</p>
+        </div>
+        <button class="btn btn-warn" data-order-id="${orderId}" id="acceptBtn">Acepto presupuesto adicional</button>
+      </div>
+    `;
+  }
+
+  resultBox.addEventListener('click', async (e) => {
+    if(e.target && e.target.id === 'acceptBtn'){
+      const orderId = e.target.dataset.orderId;
+      e.target.disabled = true;
+      e.target.textContent = "Enviando...";
+      try{
+        await updateDoc(doc(db, "orders", orderId), { clienteAcepto: true });
+        showToast("Presupuesto aceptado correctamente ✓");
+      }catch(err){
+        console.error(err);
+        showToast("No se pudo enviar la confirmación. Intentá de nuevo.");
+        e.target.disabled = false;
+        e.target.textContent = "Acepto presupuesto adicional";
+      }
+    }
+  });
+
+  /* =========================================================================
+     SECCIÓN: Tienda de accesorios
+     Estructura esperada en Firestore, colección "accessories":
+     {
+       nombre: "Grip para Joy-Con",
+       categoria: "Accesorios",
+       descripcion: "Silicona antideslizante, par",
+       precio: 250,
+       stock: 12,
+       imagenURL: "https://..."
+     }
+     ========================================================================= */
+
+  async function loadAccessories(){
+    const shopGrid = document.getElementById('shopGrid');
+    try{
+      const snap = await getDocs(collection(db, "accessories"));
+      if(snap.empty){
+        shopGrid.innerHTML = `<div class="empty-state">Todavía no hay accesorios cargados en el inventario.</div>`;
+        return;
+      }
+      shopGrid.innerHTML = '';
+      snap.forEach(docSnap => {
+        const d = docSnap.data();
+        const stock = Number(d.stock) || 0;
+        const stockClass = stock === 0 ? 'stock-out' : stock <= 3 ? 'stock-low' : 'stock-ok';
+        const stockLabel = stock === 0 ? 'Agotado' : `${stock} en stock`;
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img class="product-img" src="${escapeAttr(d.imagenURL || '')}" alt="${escapeAttr(d.nombre || 'Accesorio')}" loading="lazy" onerror="this.style.opacity=0.15">
+          <div class="product-body">
+            <div class="product-cat">${escapeHTML(d.categoria || 'Accesorio')}</div>
+            <div class="product-name">${escapeHTML(d.nombre || 'Sin nombre')}</div>
+            <div class="product-desc">${escapeHTML(d.descripcion || '')}</div>
+            <div class="product-foot">
+              <span class="product-price">L. ${Number(d.precio || 0).toLocaleString('es-HN')}</span>
+              <span class="product-stock ${stockClass}">${stockLabel}</span>
+            </div>
+          </div>
+        `;
+        shopGrid.appendChild(card);
+      });
+    }catch(err){
+      console.error(err);
+      shopGrid.innerHTML = `<div class="error-state">No se pudo cargar el inventario en este momento.</div>`;
+    }
+  }
+  loadAccessories();
+
+  /* ---------- helpers ---------- */
+  function escapeHTML(str){
+    return String(str).replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+  }
+  function escapeAttr(str){ return escapeHTML(str); }
+</script>
+
+</body>
+</html>
