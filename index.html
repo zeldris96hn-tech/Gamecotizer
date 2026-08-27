@@ -646,21 +646,22 @@
 
   /* =========================================================================
      SECCIÓN: Tienda de accesorios
-     Estructura esperada en Firestore, colección "accessories":
+     Lee de la colección "store" (nombre usado por la app Android).
+     Acepta nombres de campo en español o inglés, ej:
      {
-       nombre: "Grip para Joy-Con",
-       categoria: "Accesorios",
-       descripcion: "Silicona antideslizante, par",
-       precio: 250,
-       stock: 12,
-       imagenURL: "https://..."
+       nombre / name: "Grip para Joy-Con",
+       categoria / category: "Accesorios",
+       descripcion / description: "Silicona antideslizante, par",
+       precio / price: 250,
+       stock / cantidad: 12,
+       imagenURL / imageUrl: "https://..."
      }
      ========================================================================= */
 
   async function loadAccessories(){
     const shopGrid = document.getElementById('shopGrid');
     try{
-      const snap = await getDocs(collection(db, "accessories"));
+      const snap = await getDocs(collection(db, "store"));
       if(snap.empty){
         shopGrid.innerHTML = `<div class="empty-state">Todavía no hay accesorios cargados en el inventario.</div>`;
         return;
@@ -668,19 +669,33 @@
       shopGrid.innerHTML = '';
       snap.forEach(docSnap => {
         const d = docSnap.data();
-        const stock = Number(d.stock) || 0;
+        // Lectura flexible: acepta nombres de campo en español o en inglés,
+        // por si la app los guardó distinto (nombre/name, precio/price, etc.)
+        const pick = (...keys) => {
+          for (const k of keys) {
+            if (d[k] !== undefined && d[k] !== null && d[k] !== '') return d[k];
+          }
+          return undefined;
+        };
+        const nombre = pick('nombre', 'name', 'titulo', 'title');
+        const categoria = pick('categoria', 'category', 'tipo');
+        const descripcion = pick('descripcion', 'description', 'desc');
+        const precio = Number(pick('precio', 'price', 'precioL') || 0);
+        const stock = Number(pick('stock', 'cantidad', 'quantity') || 0);
+        const imagenURL = pick('imagenURL', 'imageUrl', 'imagenUrl', 'imagen', 'image', 'foto', 'photoUrl');
+
         const stockClass = stock === 0 ? 'stock-out' : stock <= 3 ? 'stock-low' : 'stock-ok';
         const stockLabel = stock === 0 ? 'Agotado' : `${stock} en stock`;
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
-          <img class="product-img" src="${escapeAttr(d.imagenURL || '')}" alt="${escapeAttr(d.nombre || 'Accesorio')}" loading="lazy" onerror="this.style.opacity=0.15">
+          <img class="product-img" src="${escapeAttr(imagenURL || '')}" alt="${escapeAttr(nombre || 'Accesorio')}" loading="lazy" onerror="this.style.opacity=0.15">
           <div class="product-body">
-            <div class="product-cat">${escapeHTML(d.categoria || 'Accesorio')}</div>
-            <div class="product-name">${escapeHTML(d.nombre || 'Sin nombre')}</div>
-            <div class="product-desc">${escapeHTML(d.descripcion || '')}</div>
+            <div class="product-cat">${escapeHTML(categoria || 'Accesorio')}</div>
+            <div class="product-name">${escapeHTML(nombre || 'Sin nombre')}</div>
+            <div class="product-desc">${escapeHTML(descripcion || '')}</div>
             <div class="product-foot">
-              <span class="product-price">L. ${Number(d.precio || 0).toLocaleString('es-HN')}</span>
+              <span class="product-price">L. ${precio.toLocaleString('es-HN')}</span>
               <span class="product-stock ${stockClass}">${stockLabel}</span>
             </div>
           </div>
