@@ -703,6 +703,7 @@
     if(!btn || !currentOrderData || !currentOrderId) return;
 
     const jobIndex = Number(btn.dataset.jobIndex);
+    const job = currentOrderData.trabajos[jobIndex];
     btn.disabled = true;
     btn.textContent = "Enviando...";
     try{
@@ -711,6 +712,18 @@
       );
       await updateDoc(doc(db, "orders", currentOrderId), { trabajos: updatedTrabajos });
       showToast("Presupuesto aceptado correctamente ✓");
+
+      // Armamos el mensaje de WhatsApp con los datos exactos del equipo aprobado,
+      // para que quede claro cuál reparación es la que se autorizó.
+      const mensaje =
+        `Hola! Quiero confirmar que acepto el presupuesto adicional.\n\n` +
+        `Orden N.°: ${currentOrderData.numeroOrden || ''}\n` +
+        `Cliente: ${currentOrderData.clienteNombre || ''}\n` +
+        `Equipo: ${job.dispositivo || ''}\n` +
+        (job.servicio ? `Servicio: ${job.servicio}\n` : '') +
+        `Presupuesto adicional: ${job.presupuestoAdicional || ''}`;
+
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`, '_blank');
     }catch(err){
       console.error(err);
       showToast("No se pudo enviar la confirmación. Intentá de nuevo.");
