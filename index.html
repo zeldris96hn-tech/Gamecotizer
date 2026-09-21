@@ -207,6 +207,30 @@
   .hint{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-low);margin-top:10px;}
 
   #trackerResult{margin-top:32px;}
+
+  .order-header{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;}
+  .order-header .client-name{font-family:var(--font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;}
+  .order-header .order-meta{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-low);margin-top:4px;}
+  .order-header .jobs-count{font-family:var(--font-mono);font-size:0.78rem;color:var(--neon);text-transform:uppercase;letter-spacing:0.06em;}
+
+  .jobs-list{display:flex;flex-direction:column;gap:16px;}
+
+  .job-card{
+    border:1px solid var(--line);border-radius:var(--radius-md);
+    padding:22px;background:var(--bg-panel-raised);
+  }
+  .job-index{
+    font-family:var(--font-mono);font-size:0.72rem;color:var(--text-low);
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;
+  }
+  .job-service{
+    font-family:var(--font-mono);font-size:0.82rem;color:var(--neon);margin-top:3px;
+  }
+  .photo-label{
+    font-family:var(--font-mono);font-size:0.7rem;color:var(--text-low);
+    text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;
+  }
+
   .status-card{
     border:1px solid var(--line);border-radius:var(--radius-md);
     padding:28px;background:var(--bg-panel-raised);
@@ -356,6 +380,26 @@
     opacity:0;pointer-events:none;transition:all .3s ease;z-index:70;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ---------- ajustes mobile ---------- */
+  @media(max-width:600px){
+    .wrap{padding:0 16px;}
+    .hero{padding:56px 0 48px;}
+    section.block{padding:52px 0;}
+    .block-head{margin-bottom:28px;}
+    .tracker-panel{padding:18px;border-radius:var(--radius-md);}
+    .lookup-form{flex-direction:column;}
+    .lookup-form input, .lookup-form button{width:100%;}
+    .status-card, .job-card{padding:16px;}
+    .status-top{margin-bottom:16px;}
+    .order-header{margin-bottom:18px;padding-bottom:14px;}
+    .order-header .client-name{font-size:1.2rem;}
+    .photos-row img{width:76px;height:76px;}
+    .approval-box{flex-direction:column;align-items:flex-start;}
+    .approval-box button{width:100%;}
+    .shop-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
+    nav{padding:14px 16px;}
+  }
 </style>
 </head>
 <body>
@@ -394,15 +438,15 @@
       <div class="block-head">
         <div class="eyebrow">Estado en vivo</div>
         <h2>Consultá mi reparación</h2>
-        <p>Ingresá el número de teléfono con el que dejaste tu equipo y vas a ver el estado actualizado al instante, incluidas las fotos del proceso.</p>
+        <p>Ingresá tu número de orden y vas a ver el estado de cada equipo registrado, actualizado al instante, con las fotos del proceso.</p>
       </div>
 
       <div class="tracker-panel">
         <form class="lookup-form" id="lookupForm">
-          <input type="tel" id="phoneInput" placeholder="Ej: 9999-9999" autocomplete="tel" required>
+          <input type="text" id="orderInput" placeholder="Ej: 0007" autocomplete="off" required>
           <button type="submit" class="btn btn-primary">Buscar orden</button>
         </form>
-        <p class="hint">// El número debe coincidir exactamente con el registrado al recibir el equipo.</p>
+        <p class="hint">// El número de orden te lo dieron al dejar tu equipo. Podés escribirlo con o sin ceros adelante.</p>
 
         <div id="trackerResult"></div>
       </div>
@@ -442,9 +486,9 @@
 
 <div class="modal-overlay" id="phoneModalOverlay">
   <div class="modal-box">
-    <h4>¿Con qué número dejaste tu equipo?</h4>
+    <h4>¿Cuál es tu número de orden?</h4>
     <p>Vamos a agregar este producto directo a tu orden de reparación para que el técnico lo vea.</p>
-    <input type="tel" id="modalPhoneInput" placeholder="Ej: 9999-9999" autocomplete="tel">
+    <input type="text" id="modalPhoneInput" placeholder="Ej: 0007" autocomplete="off">
     <div class="modal-actions">
       <button class="btn btn-ghost" id="modalCancelBtn">Cancelar</button>
       <button class="btn btn-primary" id="modalConfirmBtn">Confirmar pedido</button>
@@ -500,51 +544,56 @@
      SECCIÓN: Consultar mi reparación
      Estructura esperada en Firestore, colección "orders":
      {
-       telefono: "99999999",
-       dispositivo: "PS5 - Control DualSense",
-       estado: "Pendiente" | "En Proceso" | "Listo",
-       fotos: ["https://...", "https://..."],
-       notas: "texto libre del técnico",
-       requiereAprobacion: true | false,
-       presupuestoAdicional: "L. 350 - cambio de sticks analógicos",
-       clienteAcepto: true | false,
+       numeroOrden: "0007",              // lo que el cliente escribe para buscar
+       clienteNombre: "Juan Pérez",
+       telefono: "99999999",             // opcional, solo para contacto interno
+       trabajos: [                       // hasta 10 equipos/servicios en la misma orden
+         {
+           dispositivo: "Control PS4",
+           servicio: "Cambio de sticks analógicos",
+           estado: "Pendiente" | "En Proceso" | "Listo",
+           fotoEquipo: "https://...",          // foto de cómo llegó el equipo
+           fotosProceso: ["https://...", ...], // fotos del avance de reparación
+           notas: "texto libre del técnico",
+           requiereAprobacion: true | false,
+           presupuestoAdicional: "L. 350 - cambio de sticks analógicos",
+           clienteAcepto: true | false
+         },
+         ...
+       ],
        actualizado: <timestamp>
      }
      ========================================================================= */
 
   const STATUS_STEPS = { "Pendiente": 1, "En Proceso": 2, "Listo": 3 };
   let unsubscribeOrder = null;
-  let currentClientPhone = null; // Recordamos el teléfono ya consultado para vincular pedidos de la tienda
+  let currentOrderNumber = null; // Recordamos el número de orden ya consultado para vincular pedidos de la tienda
+  let currentOrderData = null;   // Datos completos de la orden mostrada, para poder actualizar un trabajo puntual
+  let currentOrderId = null;
 
   const lookupForm = document.getElementById('lookupForm');
   const resultBox = document.getElementById('trackerResult');
 
   lookupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const phone = document.getElementById('phoneInput').value.trim();
-    if(!phone) return;
+    const orderNumber = document.getElementById('orderInput').value.trim();
+    if(!orderNumber) return;
 
-    currentClientPhone = phone;
+    currentOrderNumber = orderNumber;
     if(unsubscribeOrder) unsubscribeOrder();
 
     resultBox.innerHTML = `<div class="empty-state"><span class="spinner"></span> Buscando tu orden...</div>`;
 
     try{
       const ordersRef = collection(db, "orders");
-      const q = query(ordersRef, where("telefono", "==", phone));
+      const q = query(ordersRef, where("numeroOrden", "==", orderNumber));
 
       unsubscribeOrder = onSnapshot(q, (snapshot) => {
         if(snapshot.empty){
-          resultBox.innerHTML = `<div class="empty-state">No encontramos ninguna orden asociada a ese número.<br>Verificá el número o escribinos por WhatsApp.</div>`;
+          resultBox.innerHTML = `<div class="empty-state">No encontramos ninguna orden con ese número.<br>Verificalo o escribinos por WhatsApp.</div>`;
           return;
         }
-        // Si hay más de una orden activa, mostramos la más reciente
-        const docs = snapshot.docs.sort((a,b) => {
-          const ta = a.data().actualizado?.toMillis?.() || 0;
-          const tb = b.data().actualizado?.toMillis?.() || 0;
-          return tb - ta;
-        });
-        renderOrder(docs[0]);
+        renderOrder(snapshot.docs[0]);
       }, (err) => {
         console.error(err);
         resultBox.innerHTML = `<div class="error-state">Ocurrió un error al consultar tu orden. Intentá de nuevo en unos segundos.</div>`;
@@ -557,17 +606,48 @@
 
   function renderOrder(docSnap){
     const data = docSnap.data();
-    const estado = data.estado || "Pendiente";
-    const step = STATUS_STEPS[estado] || 1;
-    const pillClass = estado === "Listo" ? "st-listo" : estado === "En Proceso" ? "st-proceso" : "st-pendiente";
-    const fotos = Array.isArray(data.fotos) ? data.fotos : [];
+    currentOrderData = data;
+    currentOrderId = docSnap.id;
+
+    const trabajos = Array.isArray(data.trabajos) ? data.trabajos : [];
+
+    if(trabajos.length === 0){
+      resultBox.innerHTML = `<div class="empty-state">Esta orden todavía no tiene equipos registrados.</div>`;
+      return;
+    }
+
+    // Ordenamos: primero los que todavía no están "Listo", para que el cliente
+    // vea de una vez lo que sigue pendiente.
+    const ordered = trabajos.map((t, i) => ({ ...t, _i: i }))
+      .sort((a, b) => (STATUS_STEPS[a.estado] || 1) - (STATUS_STEPS[b.estado] || 1));
 
     resultBox.innerHTML = `
-      <div class="status-card">
+      <div class="order-header">
+        <div>
+          <div class="client-name">${escapeHTML(data.clienteNombre || "Cliente")}</div>
+          <div class="order-meta">Orden N.° ${escapeHTML(data.numeroOrden || currentOrderNumber)}</div>
+        </div>
+        <div class="jobs-count">${trabajos.length} equipo${trabajos.length !== 1 ? 's' : ''} en esta orden</div>
+      </div>
+      <div class="jobs-list">
+        ${ordered.map(job => renderJob(job, job._i, trabajos.length)).join('')}
+      </div>
+    `;
+  }
+
+  function renderJob(job, index, total){
+    const estado = job.estado || "Pendiente";
+    const step = STATUS_STEPS[estado] || 1;
+    const pillClass = estado === "Listo" ? "st-listo" : estado === "En Proceso" ? "st-proceso" : "st-pendiente";
+    const fotosProceso = Array.isArray(job.fotosProceso) ? job.fotosProceso : [];
+
+    return `
+      <div class="job-card">
         <div class="status-top">
           <div>
-            <div class="status-device">${escapeHTML(data.dispositivo || "Equipo sin nombre")}</div>
-            <div class="status-phone">Tel. ${escapeHTML(data.telefono || "")}</div>
+            <div class="job-index">Equipo ${index + 1} de ${total}</div>
+            <div class="status-device">${escapeHTML(job.dispositivo || "Equipo sin nombre")}</div>
+            ${job.servicio ? `<div class="job-service">${escapeHTML(job.servicio)}</div>` : ''}
           </div>
           <span class="status-pill ${pillClass}">${escapeHTML(estado)}</span>
         </div>
@@ -576,20 +656,27 @@
           <div class="progress-fill" style="width:${(step/3)*100}%"></div>
         </div>
 
-        ${fotos.length ? `
-          <div class="photos-row">
-            ${fotos.map(url => `<img src="${escapeAttr(url)}" alt="Foto del proceso" onclick="window.open('${escapeAttr(url)}','_blank')">`).join('')}
+        ${job.fotoEquipo ? `
+          <div class="photo-label">Foto de recepción</div>
+          <div class="photos-row" style="margin-bottom:16px;">
+            <img src="${escapeAttr(job.fotoEquipo)}" alt="Foto del equipo recibido" onclick="window.open('${escapeAttr(job.fotoEquipo)}','_blank')">
           </div>` : ''}
 
-        ${data.notas ? `<div class="notes-box">📋 ${escapeHTML(data.notas)}</div>` : ''}
+        ${fotosProceso.length ? `
+          <div class="photo-label">Fotos del proceso</div>
+          <div class="photos-row">
+            ${fotosProceso.map(url => `<img src="${escapeAttr(url)}" alt="Foto del proceso" onclick="window.open('${escapeAttr(url)}','_blank')">`).join('')}
+          </div>` : ''}
 
-        ${data.requiereAprobacion ? renderApprovalBox(docSnap.id, data) : ''}
+        ${job.notas ? `<div class="notes-box">📋 ${escapeHTML(job.notas)}</div>` : ''}
+
+        ${job.requiereAprobacion ? renderApprovalBox(index, job) : ''}
       </div>
     `;
   }
 
-  function renderApprovalBox(orderId, data){
-    if(data.clienteAcepto){
+  function renderApprovalBox(jobIndex, job){
+    if(job.clienteAcepto){
       return `
         <div class="approval-box" style="border-color:var(--neon-dim);background:rgba(61,255,110,0.05);">
           <div>
@@ -604,27 +691,31 @@
       <div class="approval-box">
         <div>
           <h4>Reparación adicional necesaria</h4>
-          <p>${escapeHTML(data.presupuestoAdicional || "El técnico detectó un problema adicional. Contactanos para más detalles.")}</p>
+          <p>${escapeHTML(job.presupuestoAdicional || "El técnico detectó un problema adicional. Contactanos para más detalles.")}</p>
         </div>
-        <button class="btn btn-warn" data-order-id="${orderId}" id="acceptBtn">Acepto presupuesto adicional</button>
+        <button class="btn btn-warn accept-job-btn" data-job-index="${jobIndex}">Acepto presupuesto adicional</button>
       </div>
     `;
   }
 
   resultBox.addEventListener('click', async (e) => {
-    if(e.target && e.target.id === 'acceptBtn'){
-      const orderId = e.target.dataset.orderId;
-      e.target.disabled = true;
-      e.target.textContent = "Enviando...";
-      try{
-        await updateDoc(doc(db, "orders", orderId), { clienteAcepto: true });
-        showToast("Presupuesto aceptado correctamente ✓");
-      }catch(err){
-        console.error(err);
-        showToast("No se pudo enviar la confirmación. Intentá de nuevo.");
-        e.target.disabled = false;
-        e.target.textContent = "Acepto presupuesto adicional";
-      }
+    const btn = e.target.closest('.accept-job-btn');
+    if(!btn || !currentOrderData || !currentOrderId) return;
+
+    const jobIndex = Number(btn.dataset.jobIndex);
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+    try{
+      const updatedTrabajos = currentOrderData.trabajos.map((t, i) =>
+        i === jobIndex ? { ...t, clienteAcepto: true } : t
+      );
+      await updateDoc(doc(db, "orders", currentOrderId), { trabajos: updatedTrabajos });
+      showToast("Presupuesto aceptado correctamente ✓");
+    }catch(err){
+      console.error(err);
+      showToast("No se pudo enviar la confirmación. Intentá de nuevo.");
+      btn.disabled = false;
+      btn.textContent = "Acepto presupuesto adicional";
     }
   });
 
@@ -703,7 +794,7 @@
      escuchar esta colección en tiempo real para notificar al técnico.
      Estructura del documento creado:
      {
-       telefono: "94212074",
+       numeroOrden: "0007",
        productoId: "id_del_documento_en_accessories",
        productoNombre: "Grip para Joy-Con",
        precio: 250,
@@ -726,8 +817,8 @@
       precio: Number(btn.dataset.productPrice)
     };
 
-    if(currentClientPhone){
-      sendPurchaseRequest(currentClientPhone, product, btn);
+    if(currentOrderNumber){
+      sendPurchaseRequest(currentOrderNumber, product, btn);
     }else{
       pendingProduct = { ...product, triggerBtn: btn };
       modalPhoneInput.value = '';
@@ -742,20 +833,20 @@
   });
 
   document.getElementById('modalConfirmBtn').addEventListener('click', () => {
-    const phone = modalPhoneInput.value.trim();
-    if(!phone){
+    const orderNumber = modalPhoneInput.value.trim();
+    if(!orderNumber){
       modalPhoneInput.focus();
       return;
     }
-    currentClientPhone = phone;
+    currentOrderNumber = orderNumber;
     phoneModalOverlay.classList.remove('show');
     if(pendingProduct){
-      sendPurchaseRequest(phone, pendingProduct, pendingProduct.triggerBtn);
+      sendPurchaseRequest(orderNumber, pendingProduct, pendingProduct.triggerBtn);
       pendingProduct = null;
     }
   });
 
-  async function sendPurchaseRequest(phone, product, btnEl){
+  async function sendPurchaseRequest(orderNumber, product, btnEl){
     const originalText = btnEl ? btnEl.innerHTML : '';
     if(btnEl){
       btnEl.disabled = true;
@@ -763,7 +854,7 @@
     }
     try{
       await addDoc(collection(db, "solicitudes_compra"), {
-        telefono: phone,
+        numeroOrden: orderNumber,
         productoId: product.id,
         productoNombre: product.nombre,
         precio: product.precio,
