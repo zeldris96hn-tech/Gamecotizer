@@ -271,9 +271,13 @@
   }
   .approval-box h4{font-family:var(--font-display);color:var(--warn);text-transform:uppercase;font-size:1.05rem;margin-bottom:6px;}
   .approval-box p{color:var(--text-mid);font-size:0.92rem;max-width:420px;}
+  .approval-actions{display:flex;gap:10px;flex-wrap:wrap;}
   .btn-warn{background:var(--warn);color:#241300;}
   .btn-warn:hover{box-shadow:0 0 24px var(--warn-glow);}
   .btn-accepted{background:transparent;border:1px solid var(--neon);color:var(--neon);cursor:default;}
+  .btn-reject{background:transparent;border:1px solid var(--danger);color:var(--danger);}
+  .btn-reject:hover{background:var(--danger);color:#fff;box-shadow:0 0 18px rgba(255,77,94,0.35);}
+  .btn-rejected{background:transparent;border:1px solid var(--danger);color:var(--danger);cursor:default;}
 
   .empty-state, .error-state{
     font-family:var(--font-mono);color:var(--text-low);padding:34px 0;text-align:center;
@@ -396,6 +400,7 @@
     .order-header .client-name{font-size:1.2rem;}
     .photos-row img{width:76px;height:76px;}
     .approval-box{flex-direction:column;align-items:flex-start;}
+    .approval-actions{width:100%;flex-direction:column;}
     .approval-box button{width:100%;}
     .shop-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
     nav{padding:14px 16px;}
@@ -557,7 +562,8 @@
            notas: "texto libre del técnico",
            requiereAprobacion: true | false,
            presupuestoAdicional: "L. 350 - cambio de sticks analógicos",
-           clienteAcepto: true | false
+           clienteAcepto: true | false,
+           clienteRechazo: true | false
          },
          ...
        ],
@@ -687,36 +693,59 @@
         </div>
       `;
     }
+    if(job.clienteRechazo){
+      return `
+        <div class="approval-box" style="border-color:var(--danger);background:rgba(255,77,94,0.06);">
+          <div>
+            <h4 style="color:var(--danger);">Presupuesto rechazado</h4>
+            <p>Le avisamos al técnico que no aprobás este gasto adicional.</p>
+          </div>
+          <button class="btn btn-rejected" disabled>✕ Rechazado</button>
+        </div>
+      `;
+    }
     return `
       <div class="approval-box">
         <div>
           <h4>Reparación adicional necesaria</h4>
           <p>${escapeHTML(job.presupuestoAdicional || "El técnico detectó un problema adicional. Contactanos para más detalles.")}</p>
         </div>
-        <button class="btn btn-warn accept-job-btn" data-job-index="${jobIndex}">Acepto presupuesto adicional</button>
+        <div class="approval-actions">
+          <button class="btn btn-reject reject-job-btn" data-job-index="${jobIndex}">No acepto</button>
+          <button class="btn btn-warn accept-job-btn" data-job-index="${jobIndex}">Acepto presupuesto adicional</button>
+        </div>
       </div>
     `;
   }
 
   resultBox.addEventListener('click', async (e) => {
-    const btn = e.target.closest('.accept-job-btn');
+    const acceptBtn = e.target.closest('.accept-job-btn');
+    const rejectBtn = e.target.closest('.reject-job-btn');
+    const btn = acceptBtn || rejectBtn;
     if(!btn || !currentOrderData || !currentOrderId) return;
 
+    const isAccept = !!acceptBtn;
     const jobIndex = Number(btn.dataset.jobIndex);
     const job = currentOrderData.trabajos[jobIndex];
+    const originalText = btn.textContent;
     btn.disabled = true;
     btn.textContent = "Enviando...";
+
     try{
       const updatedTrabajos = currentOrderData.trabajos.map((t, i) =>
-        i === jobIndex ? { ...t, clienteAcepto: true } : t
+        i === jobIndex
+          ? (isAccept ? { ...t, clienteAcepto: true } : { ...t, clienteRechazo: true })
+          : t
       );
       await updateDoc(doc(db, "orders", currentOrderId), { trabajos: updatedTrabajos });
-      showToast("Presupuesto aceptado correctamente ✓");
+      showToast(isAccept ? "Presupuesto aceptado correctamente ✓" : "Presupuesto rechazado, le avisamos al técnico.");
 
-      // Armamos el mensaje de WhatsApp con los datos exactos del equipo aprobado,
-      // para que quede claro cuál reparación es la que se autorizó.
+      // Armamos el mensaje de WhatsApp con los datos exactos del equipo,
+      // para que quede claro cuál reparación es la que se aprobó o rechazó.
       const mensaje =
-        `Hola! Quiero confirmar que acepto el presupuesto adicional.\n\n` +
+        (isAccept
+          ? `Hola! Quiero confirmar que acepto el presupuesto adicional.\n\n`
+          : `Hola! Quiero avisar que NO acepto el presupuesto adicional propuesto.\n\n`) +
         `Orden N.°: ${currentOrderData.numeroOrden || ''}\n` +
         `Cliente: ${currentOrderData.clienteNombre || ''}\n` +
         `Equipo: ${job.dispositivo || ''}\n` +
@@ -728,7 +757,7 @@
       console.error(err);
       showToast("No se pudo enviar la confirmación. Intentá de nuevo.");
       btn.disabled = false;
-      btn.textContent = "Acepto presupuesto adicional";
+      btn.textContent = originalText;
     }
   });
 
