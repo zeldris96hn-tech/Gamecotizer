@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GAMER PRO // Reparación & Accesorios</title>
+<title>OLIVER GAMES // Reparación & Accesorios</title>
 <meta name="description" content="Servicio técnico especializado en consolas y PC gamer. Consulta el estado de tu reparación en tiempo real y compra accesorios en stock.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,6 +120,7 @@
     border:1px solid var(--neon-dim);color:var(--neon);
     padding:9px 18px;border-radius:var(--radius-sm);
     transition:all .2s;
+    box-shadow:0 0 10px rgba(61,255,110,0.15);
   }
   .nav-cta:hover{background:var(--neon);color:#04140a;box-shadow:0 0 22px var(--neon-glow);}
   .burger{display:none;background:none;border:none;color:var(--neon);font-size:1.6rem;cursor:pointer;}
@@ -131,44 +132,79 @@
 
   /* ---------- hero ---------- */
   .hero{
-    padding:96px 0 80px;
+    padding:64px 0 72px;
     position:relative;
+    text-align:center;
   }
   .hero-grid{
-    max-width:720px;
+    max-width:760px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
 
   .hero h1{
-    font-size:clamp(2.6rem,5.4vw,4.4rem);
-    font-weight:700;line-height:1.02;text-transform:uppercase;
-    margin-bottom:22px;
+    font-size:clamp(2.4rem,5.4vw,4.2rem);
+    font-weight:700;line-height:1.04;text-transform:uppercase;
+    margin-bottom:18px;
   }
   .hero h1 .accent{
     color:var(--neon);
     text-shadow:0 0 24px var(--neon-glow), 0 0 60px rgba(61,255,110,0.18);
   }
   .hero p{
-    color:var(--text-mid);font-size:1.08rem;max-width:480px;margin-bottom:32px;
+    color:var(--text-mid);font-size:1.08rem;max-width:520px;margin-bottom:22px;
   }
-  .btn-row{display:flex;gap:16px;flex-wrap:wrap;}
+
+  .trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:36px;}
+  .trust-pill{
+    font-family:var(--font-mono);font-size:0.76rem;color:var(--text-mid);
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;
+    white-space:nowrap;
+  }
+
+  .hero-tracker{width:100%;max-width:640px;text-align:left;}
+  .tracker-label{
+    font-family:var(--font-display);font-weight:600;text-transform:uppercase;
+    letter-spacing:0.03em;font-size:1.05rem;margin-bottom:16px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .tracker-icon{filter:drop-shadow(0 0 8px var(--neon-glow));}
+
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
 
   .btn{
     font-family:var(--font-display);font-weight:600;text-transform:uppercase;
     letter-spacing:0.03em;font-size:1rem;
     padding:15px 30px;border-radius:var(--radius-sm);cursor:pointer;
-    border:none;transition:transform .15s, box-shadow .2s;
+    border:none;transition:transform .15s, box-shadow .25s;
     display:inline-flex;align-items:center;gap:10px;
+    position:relative;overflow:hidden;isolation:isolate;
   }
   .btn:active{transform:scale(0.97);}
+  .btn::before{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%);
+    transform:translateX(-120%);
+    transition:transform .7s ease;
+  }
+  .btn:hover::before{transform:translateX(120%);}
+  .btn > *{position:relative;z-index:2;}
   .btn-primary{
     background:var(--neon);color:#04140a;
-    box-shadow:0 0 0 rgba(61,255,110,0);
+    box-shadow:0 0 16px var(--neon-glow);
+    animation:btnPulse 2.6s ease-in-out infinite;
   }
-  .btn-primary:hover{box-shadow:0 0 28px var(--neon-glow);}
+  .btn-primary:hover{box-shadow:0 0 32px var(--neon-glow), 0 0 60px rgba(61,255,110,0.2);animation-play-state:paused;}
+  @keyframes btnPulse{
+    0%,100%{box-shadow:0 0 14px var(--neon-glow);}
+    50%{box-shadow:0 0 30px var(--neon-glow), 0 0 50px rgba(61,255,110,0.16);}
+  }
   .btn-ghost{
     background:transparent;color:var(--text-hi);border:1px solid var(--line);
   }
-  .btn-ghost:hover{border-color:var(--neon-dim);color:var(--neon);}
+  .btn-ghost:hover{border-color:var(--neon-dim);color:var(--neon);box-shadow:0 0 18px rgba(61,255,110,0.12);}
 
   /* ---------- section shell ---------- */
   section.block{padding:88px 0;position:relative;}
@@ -180,11 +216,12 @@
   /* ---------- repair tracker ---------- */
   .tracker-panel{
     background:var(--bg-panel);
-    border:1px solid var(--line);
+    border:1px solid var(--neon-dim);
     border-radius:var(--radius-lg);
     padding:36px;
     position:relative;
     overflow:hidden;
+    box-shadow:0 0 40px rgba(61,255,110,0.08), 0 30px 60px -20px rgba(0,0,0,0.6);
   }
   .tracker-panel::after{
     content:"";position:absolute;left:0;right:0;height:2px;top:0;
@@ -201,7 +238,7 @@
     color:var(--text-hi);font-family:var(--font-mono);font-size:1rem;
     outline:none;transition:border-color .2s;
   }
-  .lookup-form input:focus{border-color:var(--neon-dim);}
+  .lookup-form input:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(61,255,110,0.15);}
   .lookup-form input::placeholder{color:var(--text-low);}
 
   .hint{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-low);margin-top:10px;}
@@ -411,7 +448,7 @@
 
 <header>
   <nav>
-    <div class="logo"><span>GAMER</span><span class="dot">·</span>PRO</div>
+    <div class="logo">🎮 <span>OLIVER</span><span class="dot">·</span>GAMES</div>
     <div class="nav-links">
       <a href="#reparacion">Reparación</a>
       <a href="#tienda">Tienda</a>
@@ -422,38 +459,33 @@
 </header>
 
 <main>
-  <!-- HERO -->
-  <section class="hero">
+  <!-- HERO + BÚSQUEDA DE ORDEN (lo primero que se ve) -->
+  <section class="hero" id="reparacion">
     <div class="wrap hero-grid">
       <div class="eyebrow">Servicio técnico especializado</div>
       <h1>Tu consola,<br>tu PC, tu <span class="accent">setup</span>.<br>En buenas manos.</h1>
-      <p>Diagnóstico, reparación y accesorios para gamers. Seguí el estado de tu equipo en tiempo real, desde donde estés.</p>
-      <div class="btn-row">
-        <a href="#reparacion" class="btn btn-primary">Consultar mi reparación</a>
-        <a href="#tienda" class="btn btn-ghost">Ver accesorios</a>
-      </div>
-    </div>
-  </section>
+      <p>Diagnóstico, reparación y accesorios para gamers. Consultá el estado de tu equipo en tiempo real, al instante.</p>
 
-  <div class="wrap"><div class="divider"></div></div>
-
-  <!-- REPARACION -->
-  <section class="block" id="reparacion">
-    <div class="wrap">
-      <div class="block-head">
-        <div class="eyebrow">Estado en vivo</div>
-        <h2>Consultá mi reparación</h2>
-        <p>Ingresá tu número de orden y vas a ver el estado de cada equipo registrado, actualizado al instante, con las fotos del proceso.</p>
+      <div class="trust-row">
+        <span class="trust-pill">🛡️ Garantía en reparaciones</span>
+        <span class="trust-pill">🎮 Accesorios originales</span>
       </div>
 
-      <div class="tracker-panel">
+      <div class="tracker-panel hero-tracker">
+        <div class="tracker-label">
+          <span class="tracker-icon">🔍</span> Consultá el estado de tu orden
+        </div>
         <form class="lookup-form" id="lookupForm">
-          <input type="text" id="orderInput" placeholder="Ej: 0007" autocomplete="off" required>
+          <input type="text" id="orderInput" placeholder="Ingresá tu número de orden — Ej: 0007" autocomplete="off" required>
           <button type="submit" class="btn btn-primary">Buscar orden</button>
         </form>
         <p class="hint">// El número de orden te lo dieron al dejar tu equipo. Podés escribirlo con o sin ceros adelante.</p>
 
         <div id="trackerResult"></div>
+      </div>
+
+      <div class="btn-row" style="margin-top:28px;">
+        <a href="#tienda" class="btn btn-ghost">Ver tienda de accesorios</a>
       </div>
     </div>
   </section>
@@ -480,8 +512,8 @@
 
 <footer id="contacto">
   <div class="wrap footer-row">
-    <div class="logo" style="font-size:1.1rem;"><span>GAMER</span><span class="dot">·</span>PRO</div>
-    <p>&copy; <span id="year"></span> Gamer Pro — Servicio técnico & accesorios gamer.</p>
+    <div class="logo" style="font-size:1.1rem;">🎮 <span>OLIVER</span><span class="dot">·</span>GAMES</div>
+    <p>&copy; <span id="year"></span> Oliver Games — Servicio técnico & accesorios gamer.</p>
   </div>
 </footer>
 
@@ -505,7 +537,7 @@
 
 <script type="module">
   /* =========================================================================
-     GAMER PRO — Landing page
+     OLIVER GAMES — Landing page
      Conexión a Firebase Firestore (proyecto: gamecotizer)
      ⚠️ Reemplazá firebaseConfig con las credenciales reales de tu proyecto
         (Firebase Console → Configuración del proyecto → Tus apps → SDK config)
