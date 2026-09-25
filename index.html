@@ -232,12 +232,13 @@
 
   .lookup-form{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
   .lookup-form input{
-    flex:1;min-width:220px;
+    flex:1 1 180px;min-width:0;
     background:var(--bg-void);border:1px solid var(--line);
     border-radius:var(--radius-sm);padding:15px 18px;
-    color:var(--text-hi);font-family:var(--font-mono);font-size:1rem;
+    color:var(--text-hi);font-family:var(--font-mono);font-size:1rem;letter-spacing:0.01em;
     outline:none;transition:border-color .2s;
   }
+  .lookup-form button{flex-shrink:0;}
   .lookup-form input:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(61,255,110,0.15);}
   .lookup-form input::placeholder{color:var(--text-low);}
 
@@ -476,7 +477,7 @@
           <span class="tracker-icon">🔍</span> Consultá el estado de tu orden
         </div>
         <form class="lookup-form" id="lookupForm">
-          <input type="text" id="orderInput" placeholder="Ingresá tu número de orden — Ej: 0007" autocomplete="off" required>
+          <input type="text" id="orderInput" placeholder="Ej: 0007" autocomplete="off" required>
           <button type="submit" class="btn btn-primary">Buscar orden</button>
         </form>
         <p class="hint">// El número de orden te lo dieron al dejar tu equipo. Podés escribirlo con o sin ceros adelante.</p>
