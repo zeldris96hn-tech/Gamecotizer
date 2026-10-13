@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OLIVER GAMES // Reparación & Accesorios</title>
 <meta name="description" content="Servicio técnico especializado en consolas y PC gamer. Consulta el estado de tu reparación en tiempo real y compra accesorios en stock.">
+<meta name="theme-color" content="#060a16">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,22 +13,25 @@
 
 <style>
   :root{
-    --bg-void:#08090b;
-    --bg-panel:#101216;
-    --bg-panel-raised:#161920;
-    --line:#22262e;
-    --neon:#3dff6e;
-    --neon-dim:#1c6b36;
-    --neon-glow:rgba(61,255,110,0.35);
+    --bg-void:#060a16;
+    --bg-panel:#0e1526;
+    --bg-panel-raised:#141d36;
+    --glass-panel:rgba(16,24,46,0.55);
+    --glass-panel-raised:rgba(22,32,60,0.6);
+    --glass-blur:14px;
+    --line:#223056;
+    --neon:#22e07a;
+    --neon-dim:#1a8f52;
+    --neon-glow:rgba(34,224,122,0.4);
     --warn:#ff9d3d;
     --warn-glow:rgba(255,157,61,0.3);
     --danger:#ff4d5e;
-    --text-hi:#eef2ee;
-    --text-mid:#9aa39c;
-    --text-low:#5c645e;
-    --radius-sm:8px;
-    --radius-md:14px;
-    --radius-lg:22px;
+    --text-hi:#eef2ff;
+    --text-mid:#9aa8c9;
+    --text-low:#5f6a8e;
+    --radius-sm:10px;
+    --radius-md:16px;
+    --radius-lg:24px;
     --font-display:'Rajdhani',sans-serif;
     --font-body:'Inter',sans-serif;
     --font-mono:'Share Tech Mono',monospace;
@@ -38,7 +42,12 @@
   html{scroll-behavior:smooth;}
 
   body{
-    background:var(--bg-void);
+    background:
+      radial-gradient(circle at 12% -8%, rgba(34,224,122,0.14), transparent 42%),
+      radial-gradient(circle at 88% 8%, rgba(59,130,246,0.14), transparent 45%),
+      radial-gradient(circle at 50% 115%, rgba(34,224,122,0.10), transparent 50%),
+      linear-gradient(180deg, #060a16 0%, #0a1020 55%, #070b18 100%);
+    background-attachment:fixed;
     color:var(--text-hi);
     font-family:var(--font-body);
     line-height:1.5;
@@ -57,7 +66,7 @@
       linear-gradient(var(--line) 1px, transparent 1px),
       linear-gradient(90deg, var(--line) 1px, transparent 1px);
     background-size:52px 52px;
-    opacity:0.18;
+    opacity:0.22;
     mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
   }
 
@@ -97,8 +106,9 @@
   /* ---------- nav ---------- */
   header{
     position:sticky;top:0;z-index:50;
-    background:rgba(8,9,11,0.82);
-    backdrop-filter:blur(10px);
+    background:rgba(10,14,28,0.72);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
     border-bottom:1px solid var(--line);
   }
   nav{
@@ -112,6 +122,7 @@
   }
   .logo span{color:var(--neon);text-shadow:0 0 14px var(--neon-glow);}
   .logo .dot{color:var(--text-low);}
+  .logo .logo-sub{color:#8fe4c8;}
   .nav-links{display:flex;gap:34px;font-family:var(--font-display);font-weight:600;font-size:1rem;text-transform:uppercase;letter-spacing:0.03em;}
   .nav-links a{color:var(--text-mid);transition:color .2s;position:relative;}
   .nav-links a:hover{color:var(--neon);}
@@ -120,7 +131,7 @@
     border:1px solid var(--neon-dim);color:var(--neon);
     padding:9px 18px;border-radius:var(--radius-sm);
     transition:all .2s;
-    box-shadow:0 0 10px rgba(61,255,110,0.15);
+    box-shadow:0 0 10px rgba(34,224,122,0.15);
   }
   .nav-cta:hover{background:var(--neon);color:#04140a;box-shadow:0 0 22px var(--neon-glow);}
   .burger{display:none;background:none;border:none;color:var(--neon);font-size:1.6rem;cursor:pointer;}
@@ -135,13 +146,33 @@
     padding:64px 0 72px;
     position:relative;
     text-align:center;
+    overflow:hidden;
   }
+  .hero-deco{
+    position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  }
+  .deco-icon{
+    position:absolute;font-size:9rem;opacity:0.07;filter:blur(1px) saturate(0.6);
+    color:var(--neon);
+  }
+  .deco-1{top:-10%;left:-6%;transform:rotate(-18deg);}
+  .deco-2{top:38%;right:-8%;font-size:7rem;transform:rotate(14deg);}
+  .deco-3{bottom:-12%;left:8%;font-size:6rem;transform:rotate(-8deg);}
+  .deco-streak{
+    position:absolute;height:1px;width:60%;
+    background:linear-gradient(90deg,transparent,rgba(34,224,122,0.35),transparent);
+    filter:blur(0.5px);
+  }
+  .deco-streak-1{top:22%;left:-10%;transform:rotate(-12deg);}
+  .deco-streak-2{bottom:16%;right:-10%;transform:rotate(10deg);}
   .hero-grid{
     max-width:760px;
     margin:0 auto;
     display:flex;
     flex-direction:column;
     align-items:center;
+    position:relative;
+    z-index:1;
   }
 
   .hero h1{
@@ -151,7 +182,7 @@
   }
   .hero h1 .accent{
     color:var(--neon);
-    text-shadow:0 0 24px var(--neon-glow), 0 0 60px rgba(61,255,110,0.18);
+    text-shadow:0 0 24px var(--neon-glow), 0 0 60px rgba(34,224,122,0.18);
   }
   .hero p{
     color:var(--text-mid);font-size:1.08rem;max-width:520px;margin-bottom:22px;
@@ -159,9 +190,10 @@
 
   .trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:36px;}
   .trust-pill{
-    font-family:var(--font-mono);font-size:0.76rem;color:var(--text-mid);
-    border:1px solid var(--line);border-radius:999px;padding:7px 14px;
-    white-space:nowrap;
+    font-family:var(--font-mono);font-size:0.76rem;color:#8fe4c8;
+    background:var(--glass-panel);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    border:1px solid var(--neon-dim);border-radius:999px;padding:7px 14px;
+    white-space:nowrap;box-shadow:0 0 12px rgba(34,224,122,0.08);
   }
 
   .hero-tracker{width:100%;max-width:640px;text-align:left;}
@@ -196,15 +228,15 @@
     box-shadow:0 0 16px var(--neon-glow);
     animation:btnPulse 2.6s ease-in-out infinite;
   }
-  .btn-primary:hover{box-shadow:0 0 32px var(--neon-glow), 0 0 60px rgba(61,255,110,0.2);animation-play-state:paused;}
+  .btn-primary:hover{box-shadow:0 0 32px var(--neon-glow), 0 0 60px rgba(34,224,122,0.2);animation-play-state:paused;}
   @keyframes btnPulse{
     0%,100%{box-shadow:0 0 14px var(--neon-glow);}
-    50%{box-shadow:0 0 30px var(--neon-glow), 0 0 50px rgba(61,255,110,0.16);}
+    50%{box-shadow:0 0 30px var(--neon-glow), 0 0 50px rgba(34,224,122,0.16);}
   }
   .btn-ghost{
     background:transparent;color:var(--text-hi);border:1px solid var(--line);
   }
-  .btn-ghost:hover{border-color:var(--neon-dim);color:var(--neon);box-shadow:0 0 18px rgba(61,255,110,0.12);}
+  .btn-ghost:hover{border-color:var(--neon-dim);color:var(--neon);box-shadow:0 0 18px rgba(34,224,122,0.12);}
 
   /* ---------- section shell ---------- */
   section.block{padding:88px 0;position:relative;}
@@ -215,13 +247,15 @@
 
   /* ---------- repair tracker ---------- */
   .tracker-panel{
-    background:var(--bg-panel);
+    background:var(--glass-panel);
+    backdrop-filter:blur(var(--glass-blur));
+    -webkit-backdrop-filter:blur(var(--glass-blur));
     border:1px solid var(--neon-dim);
     border-radius:var(--radius-lg);
     padding:36px;
     position:relative;
     overflow:hidden;
-    box-shadow:0 0 40px rgba(61,255,110,0.08), 0 30px 60px -20px rgba(0,0,0,0.6);
+    box-shadow:0 0 40px rgba(34,224,122,0.1), 0 30px 60px -20px rgba(0,0,0,0.6);
   }
   .tracker-panel::after{
     content:"";position:absolute;left:0;right:0;height:2px;top:0;
@@ -233,13 +267,14 @@
   .lookup-form{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
   .lookup-form input{
     flex:1 1 180px;min-width:0;
-    background:var(--bg-void);border:1px solid var(--line);
+    background:rgba(6,10,22,0.55);border:1px solid var(--neon-dim);
     border-radius:var(--radius-sm);padding:15px 18px;
     color:var(--text-hi);font-family:var(--font-mono);font-size:1rem;letter-spacing:0.01em;
-    outline:none;transition:border-color .2s;
+    outline:none;transition:border-color .2s, box-shadow .2s;
+    box-shadow:0 0 14px rgba(34,224,122,0.08) inset;
   }
   .lookup-form button{flex-shrink:0;}
-  .lookup-form input:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(61,255,110,0.15);}
+  .lookup-form input:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(34,224,122,0.18);}
   .lookup-form input::placeholder{color:var(--text-low);}
 
   .hint{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-low);margin-top:10px;}
@@ -255,7 +290,8 @@
 
   .job-card{
     border:1px solid var(--line);border-radius:var(--radius-md);
-    padding:22px;background:var(--bg-panel-raised);
+    padding:22px;background:var(--glass-panel-raised);
+    backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
   }
   .job-index{
     font-family:var(--font-mono);font-size:0.72rem;color:var(--text-low);
@@ -271,7 +307,8 @@
 
   .status-card{
     border:1px solid var(--line);border-radius:var(--radius-md);
-    padding:28px;background:var(--bg-panel-raised);
+    padding:28px;background:var(--glass-panel-raised);
+    backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
   }
   .status-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:22px;}
   .status-device{font-family:var(--font-display);font-size:1.3rem;font-weight:600;text-transform:uppercase;}
@@ -333,10 +370,11 @@
     display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;
   }
   .product-card{
-    background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius-md);
-    overflow:hidden;transition:border-color .25s, transform .25s;position:relative;
+    background:var(--glass-panel);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
+    border:1px solid var(--line);border-radius:var(--radius-md);
+    overflow:hidden;transition:border-color .25s, transform .25s, box-shadow .25s;position:relative;
   }
-  .product-card:hover{border-color:var(--neon-dim);transform:translateY(-4px);}
+  .product-card:hover{border-color:var(--neon-dim);transform:translateY(-4px);box-shadow:0 0 24px rgba(34,224,122,0.12);}
   .product-img{
     width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--bg-panel-raised);
     display:block;
@@ -367,23 +405,24 @@
   /* ---------- modal ---------- */
   .modal-overlay{
     position:fixed;inset:0;z-index:80;
-    background:rgba(4,5,6,0.78);backdrop-filter:blur(3px);
+    background:rgba(4,6,14,0.78);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
     display:none;align-items:center;justify-content:center;padding:20px;
   }
   .modal-overlay.show{display:flex;}
   .modal-box{
-    background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius-md);
+    background:var(--glass-panel-raised);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
+    border:1px solid var(--neon-dim);border-radius:var(--radius-md);
     padding:28px;max-width:380px;width:100%;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,0.7);
+    box-shadow:0 0 30px rgba(34,224,122,0.1), 0 30px 60px -20px rgba(0,0,0,0.7);
   }
   .modal-box h4{font-family:var(--font-display);font-size:1.2rem;text-transform:uppercase;margin-bottom:8px;}
   .modal-box p{color:var(--text-mid);font-size:0.9rem;margin-bottom:18px;}
   .modal-box input{
-    width:100%;background:var(--bg-void);border:1px solid var(--line);
+    width:100%;background:rgba(6,10,22,0.6);border:1px solid var(--line);
     border-radius:var(--radius-sm);padding:14px 16px;color:var(--text-hi);
     font-family:var(--font-mono);font-size:1rem;outline:none;margin-bottom:18px;
   }
-  .modal-box input:focus{border-color:var(--neon-dim);}
+  .modal-box input:focus{border-color:var(--neon);box-shadow:0 0 0 3px rgba(34,224,122,0.15);}
   .modal-actions{display:flex;gap:12px;justify-content:flex-end;}
   .modal-actions .btn{padding:11px 20px;font-size:0.9rem;}
 
@@ -411,8 +450,8 @@
   .wa-float svg{width:28px;height:28px;}
   @keyframes pulse{
     0%{box-shadow:0 0 0 0 var(--neon-glow);}
-    70%{box-shadow:0 0 0 16px rgba(61,255,110,0);}
-    100%{box-shadow:0 0 0 0 rgba(61,255,110,0);}
+    70%{box-shadow:0 0 0 16px rgba(34,224,122,0);}
+    100%{box-shadow:0 0 0 0 rgba(34,224,122,0);}
   }
 
   .toast{
@@ -427,6 +466,9 @@
   @media(max-width:600px){
     .wrap{padding:0 16px;}
     .hero{padding:56px 0 48px;}
+    .deco-icon{font-size:5.5rem;}
+    .deco-2{font-size:4.5rem;}
+    .deco-3{font-size:4rem;}
     section.block{padding:52px 0;}
     .block-head{margin-bottom:28px;}
     .tracker-panel{padding:18px;border-radius:var(--radius-md);}
@@ -449,7 +491,7 @@
 
 <header>
   <nav>
-    <div class="logo">🎮 <span>OLIVER</span><span class="dot">·</span>GAMES</div>
+    <div class="logo">🎮 <span>OLIVER</span><span class="dot">·</span><span class="logo-sub">GAMES</span></div>
     <div class="nav-links">
       <a href="#reparacion">Reparación</a>
       <a href="#tienda">Tienda</a>
@@ -462,6 +504,13 @@
 <main>
   <!-- HERO + BÚSQUEDA DE ORDEN (lo primero que se ve) -->
   <section class="hero" id="reparacion">
+    <div class="hero-deco" aria-hidden="true">
+      <span class="deco-icon deco-1">🎮</span>
+      <span class="deco-icon deco-2">🕹️</span>
+      <span class="deco-icon deco-3">🎧</span>
+      <span class="deco-streak deco-streak-1"></span>
+      <span class="deco-streak deco-streak-2"></span>
+    </div>
     <div class="wrap hero-grid">
       <div class="eyebrow">Servicio técnico especializado</div>
       <h1>Tu consola,<br>tu PC, tu <span class="accent">setup</span>.<br>En buenas manos.</h1>
@@ -513,7 +562,7 @@
 
 <footer id="contacto">
   <div class="wrap footer-row">
-    <div class="logo" style="font-size:1.1rem;">🎮 <span>OLIVER</span><span class="dot">·</span>GAMES</div>
+    <div class="logo" style="font-size:1.1rem;">🎮 <span>OLIVER</span><span class="dot">·</span><span class="logo-sub">GAMES</span></div>
     <p>&copy; <span id="year"></span> Oliver Games — Servicio técnico & accesorios gamer.</p>
   </div>
 </footer>
@@ -717,7 +766,7 @@
   function renderApprovalBox(jobIndex, job){
     if(job.clienteAcepto){
       return `
-        <div class="approval-box" style="border-color:var(--neon-dim);background:rgba(61,255,110,0.05);">
+        <div class="approval-box" style="border-color:var(--neon-dim);background:rgba(34,224,122,0.05);">
           <div>
             <h4 style="color:var(--neon);">Presupuesto aprobado</h4>
             <p>Gracias por confirmar. Ya seguimos con la reparación adicional.</p>
